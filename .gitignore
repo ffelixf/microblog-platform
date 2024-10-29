@@ -1,0 +1,48 @@
+# Archivos binarios de Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
+
+# Archivos de test
+*.test
+
+# Archivos de cobertura
+*.out
+
+# Archivos de dependencias
+vendor/
+
+# Archivos de IDEs y editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Variables de entorno y configuraciones locales
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Archivos de log
+*.log
+
+# Directorios de MongoDB
+data/
+mongodb/
+
+# Archivos temporales
+tmp/
+temp/
+
+# Go workspace file
+go.work

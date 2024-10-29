@@ -1,0 +1,47 @@
+# docker-compose.yml
+version: "3.8"
+
+services:
+  # Servicio principal de MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: microblog_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+      MONGO_INITDB_DATABASE: microblog
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker/mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - microblog_network
+
+  # Mongo Express para administración web (opcional, útil para desarrollo)
+  mongo-express:
+    image: mongo-express:latest
+    container_name: microblog_mongo_express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: adminpassword
+      ME_CONFIG_MONGODB_URL: mongodb://admin:adminpassword@mongodb:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: adminpassword
+    depends_on:
+      - mongodb
+    networks:
+      - microblog_network
+
+volumes:
+  mongodb_data:
+    name: microblog_mongodb_data
+
+networks:
+  microblog_network:
+    name: microblog_network
+    driver: bridge
