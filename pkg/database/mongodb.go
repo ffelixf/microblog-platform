@@ -2,48 +2,46 @@
 package database
 
 import (
-    "context"
-    "fmt"
-    "time"
-    "os"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+	"context"
+	"log"
+	"os"
+	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var Client *mongo.Client
+func ConnectDB() *mongo.Client {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-func ConnectMongoDB() (*mongo.Client, error) {
-    ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-    defer cancel()
+	// Obtener URI de MongoDB desde variables de entorno
+	uri := os.Getenv("MONGODB_URI")
+	if uri == "" {
+		log.Fatal("MONGODB_URI no está configurado en .env")
+	}
 
-    // Obtener URI de MongoDB desde variables de entorno
-    uri := os.Getenv("MONGODB_URI")
-    if uri == "" {
-        uri = "mongodb://microblog_user:microblog_password@localhost:27017/microblog"
-    }
+	// Conectar a MongoDB
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    // Configurar cliente MongoDB
-    clientOptions := options.Client().ApplyURI(uri)
-    client, err := mongo.Connect(ctx, clientOptions)
-    if err != nil {
-        return nil, fmt.Errorf("failed to connect to MongoDB: %v", err)
-    }
+	// Verificar la conexión
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    // Verificar conexión
-    err = client.Ping(ctx, nil)
-    if err != nil {
-        return nil, fmt.Errorf("failed to ping MongoDB: %v", err)
-    }
-
-    Client = client
-    return client, nil
+	log.Println("Conectado a MongoDB!")
+	return client
 }
 
-// GetCollection retorna una colección específica
+// GetCollection obtiene una colección específica
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
-    database := os.Getenv("MONGODB_DATABASE")
-    if database == "" {
-        database = "microblog"
-    }
-    return client.Database(database).Collection(collectionName)
+	database := os.Getenv("MONGODB_DATABASE")
+	if database == "" {
+		database = "microblog"
+	}
+	return client.Database(database).Collection(collectionName)
 }
