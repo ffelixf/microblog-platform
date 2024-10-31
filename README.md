@@ -317,3 +317,8 @@ curl -X POST http://localhost:8080/api/v1/tweets \
 # Obtener timeline
 curl http://localhost:8080/api/v1/users/<USER_ID>/timeline
 ```
+## API Documentation
+
+La documentación de la API está disponible en:
+- Swagger UI: http://localhost:8080/swagger/index.html
+- API Docs JSON: http://localhost:8080/swagger/doc.json

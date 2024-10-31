@@ -12,6 +12,8 @@ import (
 	"github.com/ffelixf/microblog-platform/internal/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -119,6 +121,9 @@ func main() {
 
 	// Configurar router
 	r := gin.Default()
+
+	// Swagger
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Registrar rutas
 	handlers.RegisterUserRoutes(r, userHandler)

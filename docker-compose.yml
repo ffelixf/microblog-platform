@@ -2,6 +2,7 @@
 version: "3.8"
 
 services:
+  
   # Servicio principal de MongoDB
   mongodb:
     image: mongo:latest

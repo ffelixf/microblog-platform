@@ -19,6 +19,18 @@ func NewUserHandler(userRepo *repository.UserRepository) *UserHandler {
 	}
 }
 
+// CreateUser godoc
+// @Summary      Crear nuevo usuario
+// @Description  Crea un nuevo usuario en la plataforma
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        user  body      models.User  true  "Información del usuario"
+// @Success      201   {object}  models.User
+// @Failure      400   {object}  models.Error
+// @Failure      409   {object}  models.Error
+// @Router       /users [post]
+
 // CreateUser maneja la creación de nuevos usuarios
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var user models.User
@@ -38,6 +50,17 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, user)
 }
+
+// GetUser godoc
+// @Summary      Obtener usuario por ID
+// @Description  Obtiene un usuario por su ID
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "ID del usuario"
+// @Success      200  {object}  models.User
+// @Failure      404  {object}  models.Error
+// @Router       /users/{id} [get]
 
 // GetUser maneja la obtención de un usuario por ID
 func (h *UserHandler) GetUser(c *gin.Context) {
@@ -91,6 +114,19 @@ func (h *UserHandler) GetFollowers(c *gin.Context) {
 		"followers": followers,
 	})
 }
+
+// FollowUser godoc
+// @Summary      Seguir a un usuario
+// @Description  Hace que un usuario siga a otro
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        id         path      string  true  "ID del usuario que sigue"
+// @Param        target_id  path      string  true  "ID del usuario a seguir"
+// @Success      200        {object}  models.FollowResponse
+// @Failure      400        {object}  models.Error
+// @Failure      404        {object}  models.Error
+// @Router       /users/{id}/follow/{target_id} [post]
 
 // FollowUser maneja la acción de seguir a otro usuario
 func (h *UserHandler) FollowUser(c *gin.Context) {
