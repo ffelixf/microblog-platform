@@ -9,7 +9,7 @@ import (
 
 type Tweet struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
-	UserID    primitive.ObjectID `bson:"user_id" json:"user_id"`
-	Content   string             `bson:"content" json:"content"`
+	UserID    primitive.ObjectID `bson:"user_id" json:"user_id" binding:"required"`
+	Content   string             `bson:"content" json:"content" binding:"required,max=280"`
 	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
 }
